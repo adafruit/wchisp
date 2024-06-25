@@ -37,11 +37,11 @@ jobs:
         run: cargo run --release -- --help
       - name: Compress binary
         run: |
-          mkdir -p release
-          cp target/release/wchisp release/ || true
-          cp target/release/wchisp.exe release/ || true
-          cp README.md release/
-          (cd release/ && tar -czvf ../wchisp-${{ matrix.config.arch }}.tar.gz *)
+          mkdir -p wchisp-${{ matrix.config.arch }}
+          cp target/release/wchisp wchisp-${{ matrix.config.arch }}/ || true
+          cp target/release/wchisp.exe wchisp-${{ matrix.config.arch }}/ || true
+          cp README.md wchisp-${{ matrix.config.arch }}/
+          tar -czvf wchisp-${{ matrix.config.arch }}.tar.gz wchisp-${{ matrix.config.arch }}
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
@@ -65,10 +65,10 @@ jobs:
         run: cargo build --release --target aarch64-apple-darwin
       - name: Compress binary
         run: |
-          mkdir -p release
-          cp target/aarch64-apple-darwin/release/wchisp release/
-          cp README.md release/
-          (cd release/ && tar -czvf ../wchisp-macos-arm64.tar.gz *)
+          mkdir -p wchisp-macos-arm64
+          cp target/aarch64-apple-darwin/release/wchisp wchisp-macos-arm64/
+          cp README.md wchisp-macos-arm64/
+          tar -czvf wchisp-macos-arm64.tar.gz wchisp-macos-arm64
       - uses: actions/upload-artifact@v3
         with:
           name: wchisp-binaries
