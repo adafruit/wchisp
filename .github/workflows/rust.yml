@@ -96,10 +96,10 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: wchisp-*
+          path: ./
 
       - name: List files
-        run: ls ./
+        run: ls -R ./
         shell: bash
 
       - name: Update Nightly Release
