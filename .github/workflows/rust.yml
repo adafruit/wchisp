@@ -104,6 +104,7 @@ jobs:
           for f in wchisp-*/; do
             zip -r $f.zip $f
           done
+          ls ./
 
       - name: Update Nightly Release
         uses: andelf/nightly-release@main
@@ -116,6 +117,5 @@ jobs:
           prerelease: true
           body: |
             This is a nightly binary release of the wchisp command line tool.
-
           files: |
             wchisp-*.zip
