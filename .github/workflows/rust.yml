@@ -32,8 +32,13 @@ jobs:
       matrix:
         config:
           - os: windows-latest
+            arch: win-x64
           - os: ubuntu-latest
+            arch: linux-x64
           - os: macos-latest
+            arch: macos-arm64
+          - os: macos-12
+            arch: macos-x64
     runs-on: ${{ matrix.config.os }}
 
     steps:
@@ -44,7 +49,7 @@ jobs:
       run: cargo test
     - name: Run help
       run: cargo run -- --help
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: wchisp-${{ matrix.config.os }}
         path: target/debug/wchisp*
