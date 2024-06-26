@@ -68,7 +68,7 @@ jobs:
         cp README.md wchisp-${{ matrix.config.arch }}
         zip -r wchisp-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
         
-        if [[ "${{github.event_name}} == "release" ]]; then
+        if [[ "${{github.event_name}}" == "release" ]]; then
           cp wchisp-${{ matrix.config.arch }}.zip wchisp-${{ github.event.release.tag_name }}-${{ matrix.config.arch }}.zip
         fi
       shell: bash
