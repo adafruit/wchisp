@@ -66,21 +66,23 @@ jobs:
         mkdir wchisp-${{ matrix.config.arch }}
         cp target/release/$WCHISP_EXE wchisp-${{ matrix.config.arch }}
         cp README.md wchisp-${{ matrix.config.arch }}
-      shell: bash
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wchisp-${{ matrix.config.arch }}
-        path: wchisp-${{ matrix.config.arch }}
-
-    - name: Prepare Release Asset
-      if: github.event_name == 'release'
-      run: |
+        
         if [[ "${{ runner.os }}" == "Windows" ]]; then
-          7z a -tzip wchisp-${{ github.event.release.tag_name }}-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
+          7z a -tzip wchisp-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
         else
-          zip -r wchisp-${{ github.event.release.tag_name }}-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
+          zip -r wchisp-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
+        fi
+        
+        if [[ "${{github.event_name}}" == "release" ]]; then
+          cp wchisp-${{ matrix.config.arch }}.zip wchisp-${{ github.event.release.tag_name }}-${{ matrix.config.arch }}.zip
         fi
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: wchisp-${{ matrix.config.arch }}.zip
+        path: wchisp-${{ matrix.config.arch }}.zip
+
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v1
       if: github.event_name == 'release'
