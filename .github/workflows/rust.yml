@@ -101,7 +101,7 @@ jobs:
       - name: Prepare Nightly Asset
         run: |
           ls -R ./
-          for f in wchisp-*/; do
+          for f in wchisp-*; do
             echo "Compressing $f with zip -r $f.zip $f" 
             zip -r $f.zip $f
           done
