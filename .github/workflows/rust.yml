@@ -7,7 +7,7 @@ on:
       - "src/**"
       - "devices/**"
       - "!**.md"
-      - "./.github/workflows/rust.yml"
+      - ".github/workflows/rust.yml"
   pull_request:
     branches: [ main ]
     paths:
@@ -15,7 +15,7 @@ on:
       - "src/**"
       - "devices/**"
       - "!**.md"
-      - "./.github/workflows/rust.yml"
+      - ".github/workflows/rust.yml"
   workflow_dispatch:
 
 concurrency:
