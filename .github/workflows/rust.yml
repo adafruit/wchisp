@@ -17,6 +17,8 @@ on:
       - "!**.md"
       - ".github/workflows/rust.yml"
   workflow_dispatch:
+  schedule: # Every day at the 2 P.M. (UTC) we run a scheduled nightly build
+    - cron: "0 14 * * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +29,7 @@ env:
 
 jobs:
   build:
-    name: build (${{ matrix.config.os }})
+    name: build (${{ matrix.config.arch }})
     strategy:
       matrix:
         config:
@@ -49,7 +51,40 @@ jobs:
       run: cargo test
     - name: Run help
       run: cargo run -- --help
+    - name: Prepare artifacts
+      run: |
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          WCHISP_EXE="wchisp.exe"
+        else
+          WCHISP_EXE="wchisp"
+        fi
+                
+        mkdir wchisp-debug-${{ matrix.config.arch }}
+        cp target/debug/$WCHISP_EXE wchisp-debug-${{ matrix.config.arch }}
+        
+        mkdir wchisp-${{ matrix.config.arch }}
+        cp target/release/$WCHISP_EXE wchisp-${{ matrix.config.arch }}
+        cp README.md wchisp-${{ matrix.config.arch }}
+        zip -r wchisp-${{ matrix.config.arch }}.zip wchisp-${{ matrix.config.arch }}
+      shell: bash
+
     - uses: actions/upload-artifact@v4
       with:
-        name: wchisp-${{ matrix.config.os }}
-        path: target/debug/wchisp*
+        name: wchisp-debug-${{ matrix.config.arch }}
+        path: wchisp-debug-${{ matrix.config.arch }}
+
+    - name: Update Nightly Release
+      #if: github.event_name == 'schedule'
+      uses: andelf/nightly-release@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        name: "wchisp nightly release $$"
+        draft: false
+        prerelease: false
+        body: |
+          This is a nightly binary release of the wchisp command line tool.
+
+        files: |
+          wchisp-${{ matrix.config.arch }}.zip

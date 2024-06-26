@@ -1,9 +1,6 @@
 name: Nightly Release
 
 on:
-  push:
-    paths:
-      - ".github/workflows/nightly-release.yml"
   workflow_dispatch:
   schedule: # Every day at the 2 P.M. (UTC) we run a scheduled nightly build
     - cron: "0 14 * * *"
@@ -46,7 +43,7 @@ jobs:
           cp README.md wchisp-${{ matrix.config.arch }}/
           tar -czvf wchisp-${{ matrix.config.arch }}.tar.gz wchisp-${{ matrix.config.arch }}
         shell: bash
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: wchisp-binaries
           path: wchisp-${{ matrix.config.arch }}.tar.gz
@@ -72,7 +69,7 @@ jobs:
           cp target/aarch64-apple-darwin/release/wchisp wchisp-macos-arm64/
           cp README.md wchisp-macos-arm64/
           tar -czvf wchisp-macos-arm64.tar.gz wchisp-macos-arm64
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: wchisp-binaries
           path: wchisp-macos-arm64.tar.gz
