@@ -91,7 +91,7 @@ jobs:
   nightly-release:
     needs: build
     runs-on: ubuntu-latest
-    #if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule'
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
